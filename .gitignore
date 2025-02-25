@@ -1,0 +1,56 @@
+# 📌 Node.js / React (client)
+client/node_modules/
+client/.next/
+client/.turbo/
+client/.vercel/
+client/.idea/
+client/.vscode/
+client/.cache/
+client/.eslintcache
+client/.parcel-cache/
+client/.yarn/
+client/.pnp.*
+client/dist/
+client/out/
+client/build/
+client/coverage/
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/.env*
+client/.DS_Store
+
+# 📌 Python (server)
+server/__pycache__/
+server/.pytest_cache/
+server/.mypy_cache/
+server/.tox/
+server/.venv/
+server/venv/
+server/env/
+server/.DS_Store
+server/.env*
+server/*.pyc
+server/*.pyo
+server/.coverage
+server/coverage.xml
+server/htmlcov/
+server/instance/
+server/db.sqlite3
+server/migrations/
+server/.env
+
+# 📌 FastAPI / Django / Flask specific
+server/.pytest_cache/
+server/staticfiles/
+server/media/
+server/debug.log
+server/logs/
+
+# 📌 Common OS / IDE files
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
