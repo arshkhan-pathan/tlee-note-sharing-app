@@ -2,11 +2,16 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
 import { APP_URL } from "@/constants";
-import Editor from '@monaco-editor/react';
+import Editor from '@monaco-editor/react'; 
 
-console.log("APP_URL", APP_URL)
-export default function ClientPage({ initialNote, dynamic_id }) {
-    const [note, setNote] = useState(initialNote || "");
+interface Props {
+    initialNote? : string,
+    dynamic_id? : string
+} 
+
+
+export default function ClientPage({ initialNote, dynamic_id } : Props) {
+    const [note, setNote] = useState<string>(initialNote || "");
     useEffect(() => {
         if (!dynamic_id || initialNote) return;
 
@@ -25,11 +30,11 @@ export default function ClientPage({ initialNote, dynamic_id }) {
         fetchNote();
     }, [dynamic_id, initialNote]);
 
-    const onChange  = (e) => {
-        setNote(e)
+    const onChange  = (value: string | undefined) => {
+        setNote(value || "")
     }
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         try {
