@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
-import TextArea from "@/components/TextArea";
 import { APP_URL } from "@/constants";
+import Editor from '@monaco-editor/react';
 
 console.log("APP_URL", APP_URL)
-export default function ServerPage({ initialNote, dynamic_id }) {
+export default function ClientPage({ initialNote, dynamic_id }) {
     const [note, setNote] = useState(initialNote || "");
     useEffect(() => {
         if (!dynamic_id || initialNote) return;
@@ -24,6 +24,10 @@ export default function ServerPage({ initialNote, dynamic_id }) {
 
         fetchNote();
     }, [dynamic_id, initialNote]);
+
+    const onChange  = (e) => {
+        setNote(e)
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -51,7 +55,8 @@ export default function ServerPage({ initialNote, dynamic_id }) {
                 <h1>Share Anywhere</h1>
             </header>
             <form onSubmit={handleSubmit}>
-                <TextArea note={note} setNote={setNote} />
+                {/* <TextArea note={note} setNote={setNote} /> */}
+                <Editor height="500px" defaultLanguage="python" defaultValue={note} onChange={onChange} theme="vs-dark" />
                 <button type="submit">Save Note</button>
             </form>
         </div>
