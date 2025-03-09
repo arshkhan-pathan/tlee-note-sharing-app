@@ -3,7 +3,7 @@ import { APP_URL } from "@/constants";
 import type { Metadata, ResolvingMetadata } from "next";
 
 interface NotePageProps {
-  params: { dynamic_id: string };
+  params: Promise<{ dynamic_id: string }>;
 }
 
 export async function generateMetadata(
