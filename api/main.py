@@ -18,7 +18,7 @@ allow_headers = os.getenv("ALLOW_HEADERS", "").split(",")
 
 app = FastAPI()
 
-app.include_router(user_routes.router)
+# app.include_router(user_routes.router)
 app.include_router(notes_router.router)
 
 
