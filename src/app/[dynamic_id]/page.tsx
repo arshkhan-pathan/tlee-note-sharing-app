@@ -1,5 +1,5 @@
 import ClientPage from "./ClientPage";
-import { APP_URL } from "@/constants";
+import {APP_URL, BACKEND_URL} from "@/constants";
 import type { Metadata, ResolvingMetadata } from "next";
 
 interface NotePageProps {
@@ -19,13 +19,16 @@ export async function generateMetadata(
 export default async function NotePage({ params }: NotePageProps) {
   const { dynamic_id } = await params;
   console.log("APP_URL", APP_URL);
+  console.log("BACKEND_URL", BACKEND_URL);
 
   let initialNote = "";
 
   try {
-    const res = await fetch(`${APP_URL}/notes/${dynamic_id}`, {
+    const res = await fetch(`${BACKEND_URL}/notes/${dynamic_id}`, {
       cache: "no-store",
     });
+    console.log("url to hiit", `${BACKEND_URL}/notes/${dynamic_id}`)
+    console.log("res",res)
 
     if (res.ok) {
       const data = await res.json();
