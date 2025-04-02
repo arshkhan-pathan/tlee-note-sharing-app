@@ -1,2 +1,0 @@
-from dependencies.dependencies import get_user_db
-from dependencies.dependencies import get_async_session
