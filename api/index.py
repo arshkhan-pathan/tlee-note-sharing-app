@@ -9,8 +9,7 @@ import uvicorn
 load_dotenv()
 
 # Database connection
-DB_URL = os.getenv("DB_URL")
-
+DB_URL = os.getenv("NEXT_PUBLIC_DB_URL")
 
 def get_db():
     conn = sqlitecloud.connect(DB_URL)
@@ -63,7 +62,7 @@ app.add_middleware(
 )
 
 
-@app.post("/notes", response_model=NoteResponse)
+@app.post("/api/notes", response_model=NoteResponse)
 def create_note(note: NoteCreate):
     conn = get_db()
     cursor = conn.cursor()
@@ -87,7 +86,7 @@ def create_note(note: NoteCreate):
     return {"id": 1, "note": note.note, "author": "admin"}
 
 
-@app.get("/notes", response_model=list[NoteResponse])
+@app.get("/api/notes", response_model=list[NoteResponse])
 def get_notes():
     conn = get_db()
     cursor = conn.cursor()
@@ -98,7 +97,7 @@ def get_notes():
     return [{"id": row[0], "note": row[1], "author": row[2]} for row in notes]
 
 
-@app.get("/notes/{identifier}", response_model=NoteResponse)
+@app.get("/api/notes/{identifier}", response_model=NoteResponse)
 def get_note(identifier: str):
     conn = get_db()
     cursor = conn.cursor()
@@ -111,7 +110,7 @@ def get_note(identifier: str):
     return {"id": note[0], "note": note[1], "author": note[2]}
 
 
-@app.put("/notes/{note_id}", response_model=NoteResponse)
+@app.put("/api/notes/{note_id}", response_model=NoteResponse)
 def update_note(note_id: int, note: NoteCreate):
     conn = get_db()
     cursor = conn.cursor()
@@ -130,7 +129,7 @@ def update_note(note_id: int, note: NoteCreate):
     return {"id": updated_note[0], "note": updated_note[1], "author": updated_note[2]}
 
 
-@app.delete("/notes/{note_id}", status_code=204)
+@app.delete("/api/notes/{note_id}", status_code=204)
 def delete_note(note_id: int):
     conn = get_db()
     cursor = conn.cursor()
@@ -145,6 +144,6 @@ def delete_note(note_id: int):
     conn.close()
     return None
 
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+@app.get("/api/helloFastApi")
+def hello_fast_api():
+    return {"message": "Hello from /api/helloFastApi"}
