@@ -1,4 +1,4 @@
-from core.db import get_db
+from core._db import get_db
 
 def get_all_notes():
     conn = get_db()

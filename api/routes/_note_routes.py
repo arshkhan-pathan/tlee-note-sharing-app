@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from models.note import NoteCreate, NoteResponse
-import services.note_service as svc
+from models._note import NoteCreate, NoteResponse
+import services._note_service as svc
 
 router = APIRouter()
 

@@ -1,5 +1,5 @@
 import sqlitecloud
-from .config import DB_URL
+from ._config import DB_URL
 
 def get_db():
     return sqlitecloud.connect(DB_URL)

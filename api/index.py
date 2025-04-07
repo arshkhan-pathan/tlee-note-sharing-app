@@ -5,8 +5,8 @@ sys.path.append(os.path.dirname(__file__))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from core.db import initialize_db
-from routes.note_routes import router
+from core._db import initialize_db
+from routes._note_routes import router
 
 
 initialize_db()
