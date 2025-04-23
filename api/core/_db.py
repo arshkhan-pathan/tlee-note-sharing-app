@@ -1,19 +1,17 @@
-import sqlitecloud
 from ._config import DB_URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+engine = create_engine(DB_URL)
+
+SessionLocal = sessionmaker(bind=engine)
+
+Base = declarative_base()
 
 def get_db():
-    return sqlitecloud.connect(DB_URL)
-
-def initialize_db():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS notes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            note TEXT NOT NULL,
-            identifier TEXT UNIQUE NOT NULL,
-            author TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

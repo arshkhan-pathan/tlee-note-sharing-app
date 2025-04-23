@@ -5,11 +5,7 @@ sys.path.append(os.path.dirname(__file__))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from core._db import initialize_db
 from routes._note_routes import router
-
-
-initialize_db()
 
 app = FastAPI()
 
@@ -22,3 +18,8 @@ app.add_middleware(
 )
 
 app.include_router(router)
+
+# if __name__ == "__main__":
+#     import uvicorn
+#
+#     uvicorn.run("index:app", host="0.0.0.0", port=8000, reload=True)
