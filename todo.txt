@@ -1,0 +1,6 @@
+--> Add Type of Note ie Code/Text
+--> Add support of different Coding Languages
+--> Design HomePage
+--> Add Support of random url generation
+--> Copy to clipboard (Always copy to clipboard or snack bar)
+--> Better Error Handling
