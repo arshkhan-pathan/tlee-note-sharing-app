@@ -1,17 +1,14 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import styles from '../styles/Home.module.css'
-import { BACKEND_URL } from '@/constants'
 import { useParams } from 'next/navigation'
+import { Box, CircularProgress, Typography, Fade } from '@mui/material'
 import NoteEditor from '@/components/NoteEditor'
-
-type EditorMode = 'text' | 'code'
+import { BACKEND_URL } from '@/constants'
 
 export default function NoteEditorPage() {
   const { dynamic_id } = useParams() as { dynamic_id: string }
   const [note, setNote] = useState<string>('')
-  const [editorMode, setEditorMode] = useState<EditorMode>('code')
   const [isSyncing, setIsSyncing] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
@@ -25,7 +22,6 @@ export default function NoteEditorPage() {
         if (res.ok) {
           const data = await res.json()
           setNote(data?.note || '')
-          setEditorMode(data?.mode || 'code') // 👈 Optional, if backend saves mode
         } else {
           console.error('Failed to fetch note:', res.statusText)
         }
@@ -42,11 +38,10 @@ export default function NoteEditorPage() {
   }, [dynamic_id])
 
   const handleSubmit = useCallback(
-    async (newNote: string, mode: EditorMode) => {
+    async (newNote: string) => {
       try {
         const payload = {
           note: newNote,
-          mode, // 👈 Include mode if you want to store it
           author: 'string',
           identifier: dynamic_id,
         }
@@ -69,18 +64,15 @@ export default function NoteEditorPage() {
   )
 
   const onChange = useCallback(
-    (value: { content: string; mode: EditorMode } | undefined) => {
+    (value: { content: string } | undefined) => {
       const newContent = value?.content || ''
-      const newMode = value?.mode || 'code'
-
       setNote(newContent)
-      setEditorMode(newMode)
       setIsSyncing(true)
 
       if (debounceRef.current) clearTimeout(debounceRef.current)
 
       debounceRef.current = setTimeout(() => {
-        handleSubmit(newContent, newMode)
+        handleSubmit(newContent)
       }, 2000)
     },
     [handleSubmit]
@@ -92,29 +84,38 @@ export default function NoteEditorPage() {
     }
   }, [])
 
-  if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <p className={styles.loadingText}>Fetching your awesome note...</p>
-      </div>
-    )
-  }
-
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <p className={styles.subtitle}>
-          Editing: <code>{`/${dynamic_id}`}</code>
-        </p>
-      </header>
-
-      <main className={styles.editorWrapper}>
-        <NoteEditor initialContent={note} initialMode={editorMode} onChange={onChange} />
-      </main>
-
-      <footer className={styles.footer}>
-        {isSyncing ? 'Saving changes...' : 'All changes saved!'}
-      </footer>
-    </div>
+    <main style={{ padding: '1rem' }}>
+      {isLoading ? (
+        <Box textAlign="center" mt={10}>
+          <CircularProgress size={40} />
+          <Typography variant="h6" color="white" mt={2}>
+            Fetching your note...
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          <NoteEditor initialContent={note} onChange={onChange} />
+          {isSyncing && (
+            <Fade in={true}>
+              <Box
+                display="flex"
+                alignItems="center"
+                gap={1}
+                mb={2}
+                bgcolor="#222"
+                p={1}
+                borderRadius={1}
+                width="fit-content"
+                color="#fff"
+              >
+                <CircularProgress size={20} color="warning" />
+                <Typography variant="body2">Saving changes...</Typography>
+              </Box>
+            </Fade>
+          )}
+        </>
+      )}
+    </main>
   )
 }

@@ -1,57 +1,33 @@
-'use client'
-
-import React, { useState, useEffect, MouseEvent } from 'react'
-import {
-  Box,
-  Typography,
-  ToggleButton,
-  ToggleButtonGroup,
-  TextField,
-  Paper,
-  Button,
-  Stack,
-} from '@mui/material'
-import Editor, { OnChange } from '@monaco-editor/react'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-
-type EditorMode = 'text' | 'code'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 
 type NoteEditorProps = {
-  initialMode?: EditorMode
   initialContent?: string
-  onChange?: (data: { mode: EditorMode; content: string }) => void
+  onChange?: (data: { content: string }) => void
 }
 
-export default function NoteEditor({
-  initialMode = 'text',
-  initialContent = '',
-  onChange,
-}: NoteEditorProps) {
-  const [mode, setMode] = useState<EditorMode>(initialMode)
+const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }) => {
   const [content, setContent] = useState(initialContent)
+  const [windowWidth, setWindowWidth] = useState<number | null>(null)
 
   useEffect(() => {
-    setMode(initialMode)
-    setContent(initialContent)
-  }, [initialMode, initialContent])
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth)
 
-  const handleModeChange = (_: MouseEvent<HTMLElement>, newMode: EditorMode | null) => {
-    if (newMode && newMode !== mode) {
-      setMode(newMode)
-      onChange?.({ mode: newMode, content })
+      const handleResize = () => setWindowWidth(window.innerWidth)
+      window.addEventListener('resize', handleResize)
+
+      return () => window.removeEventListener('resize', handleResize)
     }
-  }
+  }, [])
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setContent(initialContent)
+  }, [initialContent])
+
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     setContent(value)
-    onChange?.({ mode, content: value })
-  }
-
-  const handleEditorChange: OnChange = (value) => {
-    const newValue = value || ''
-    setContent(newValue)
-    onChange?.({ mode, content: newValue })
+    onChange?.({ content: value })
   }
 
   const handleCopy = async () => {
@@ -62,62 +38,96 @@ export default function NoteEditor({
     }
   }
 
+  const isMobile = windowWidth !== null && windowWidth <= 600
+
   return (
-    <Box px={{ xs: 2, sm: 4 }} py={{ xs: 3, sm: 5 }} maxWidth="lg" mx="auto">
-      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
-        <Box
-          display="flex"
-          flexDirection={{ xs: 'column', sm: 'row' }}
-          justifyContent="space-between"
-          alignItems={{ xs: 'flex-start', sm: 'center' }}
-          mb={2}
-          gap={2}
+    <div
+      style={{
+        ...styles.page,
+        padding: isMobile ? 10 : 20,
+      }}
+    >
+      <header
+        style={{
+          ...styles.header,
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          gap: isMobile ? 10 : 0,
+        }}
+      >
+        <div style={styles.logo}>Shribb</div>
+        <div
+          style={{
+            ...styles.actions,
+            flexWrap: isMobile ? 'wrap' : 'nowrap',
+            gap: isMobile ? 6 : 10,
+            marginTop: isMobile ? 8 : 0,
+            width: isMobile ? '100%' : 'auto',
+            justifyContent: isMobile ? 'center' : 'flex-start',
+          }}
         >
-          <Typography variant="h5">Note Editor</Typography>
-
-          <Stack direction="row" spacing={2}>
-            <ToggleButtonGroup value={mode} exclusive onChange={handleModeChange} size="small">
-              <ToggleButton value="text">Text</ToggleButton>
-              <ToggleButton value="code">Code</ToggleButton>
-            </ToggleButtonGroup>
-
-            <Button
-              variant="outlined"
-              size="small"
-              startIcon={<ContentCopyIcon />}
-              onClick={handleCopy}
-            >
-              Copy
-            </Button>
-          </Stack>
-        </Box>
-
-        {mode === 'text' ? (
-          <TextField
-            multiline
-            fullWidth
-            rows={10}
-            value={content}
-            onChange={handleTextChange}
-            placeholder="Type your notes here..."
-          />
-        ) : (
-          <Box sx={{ height: { xs: 300, sm: 400 } }}>
-            <Editor
-              height="100%"
-              defaultLanguage="javascript"
-              value={content}
-              onChange={handleEditorChange}
-              theme="vs-dark"
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                automaticLayout: true,
-              }}
-            />
-          </Box>
-        )}
-      </Paper>
-    </Box>
+          <button style={styles.actionButton} onClick={handleCopy}>
+            Copy to Clipboard
+          </button>
+        </div>
+      </header>
+      <textarea
+        placeholder="Write a note in this area!!"
+        value={content}
+        onChange={handleTextChange}
+        style={{
+          ...styles.textArea,
+          height: isMobile ? '60vh' : '80vh',
+          fontSize: isMobile ? 14 : 16,
+        }}
+      />
+    </div>
   )
 }
+
+const styles: { [key: string]: React.CSSProperties } = {
+  page: {
+    height: '100%',
+    boxSizing: 'border-box',
+  },
+  header: {
+    backgroundColor: '#2c2c2c',
+    borderBottom: '1px solid #444',
+    padding: '10px 15px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontFamily: "'Comic Sans MS', cursive, sans-serif",
+    fontWeight: 'bold',
+    color: '#f0f0f0',
+  },
+  logo: {
+    fontSize: 24,
+    color: '#ffd54f',
+  },
+  actions: {
+    display: 'flex',
+    gap: 10,
+  },
+  actionButton: {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    color: '#ffd54f',
+  },
+  textArea: {
+    marginTop: 10,
+    width: '100%',
+    backgroundColor: '#333333',
+    border: '2px solid #555555',
+    borderLeft: '6px solid #ff7043',
+    padding: 15,
+    fontFamily: 'Arial, sans-serif',
+    boxShadow: 'inset 0 0 5px rgba(0,0,0,0.7)',
+    resize: 'none',
+    lineHeight: 1.5,
+    color: '#fffde7',
+  },
+}
+
+export default NoteEditor

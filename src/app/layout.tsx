@@ -1,5 +1,8 @@
+'use client'
+
 import './globals.css'
 import { ReactNode } from 'react'
+import BackgroundAnimation from '@/components/BackgroundAnimation'
 
 interface Props {
   children: ReactNode
@@ -8,7 +11,9 @@ interface Props {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <BackgroundAnimation>{children}</BackgroundAnimation>
+      </body>
     </html>
   )
 }
