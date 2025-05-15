@@ -80,6 +80,23 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
           height: isMobile ? '60vh' : '80vh',
           fontSize: isMobile ? 14 : 16,
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Tab') {
+            e.preventDefault()
+            const target = e.target as HTMLTextAreaElement
+            const start = target.selectionStart
+            const end = target.selectionEnd
+
+            const newValue = content.substring(0, start) + '  ' + content.substring(end) // 2 spaces
+            setContent(newValue)
+            onChange?.({ content: newValue })
+
+            // Move cursor after inserted spaces
+            requestAnimationFrame(() => {
+              target.selectionStart = target.selectionEnd = start + 2
+            })
+          }
+        }}
       />
     </div>
   )
