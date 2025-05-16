@@ -55,7 +55,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
           gap: isMobile ? 10 : 0,
         }}
       >
-        <div style={styles.logo}>Shribb</div>
+        <div style={styles.logo}>Tlee</div>
         <div
           style={{
             ...styles.actions,
