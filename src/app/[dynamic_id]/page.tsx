@@ -4,9 +4,9 @@ import NoteEditorPage from '@/components/Pages/NoteEditorPage'
 export async function generateMetadata({
   params,
 }: {
-  params: { dynamic_id: string }
+  params: Promise<{ dynamic_id: string }>
 }): Promise<Metadata> {
-  const { dynamic_id: id } = await params // await here
+  const { dynamic_id: id } = await params
 
   return {
     title: `${id} @ Tlee 🔥`,
@@ -18,6 +18,6 @@ export async function generateMetadata({
   }
 }
 
-export default function Page({ params }: { params: { dynamic_id: string } }) {
+export default function Page() {
   return <NoteEditorPage />
 }
