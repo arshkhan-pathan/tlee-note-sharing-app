@@ -226,8 +226,9 @@ export default function NoteEditorPage() {
                   }}
                   onClick={() => {
                     setModalOpen(false)
-                    if (inputId.trim()) {
-                      router.push(`/${inputId.trim()}`)
+                    const cleanedId = inputId.trim().toLowerCase()
+                    if (cleanedId) {
+                      router.push(`/${cleanedId}`)
                     }
                   }}
                   disabled={!inputId.trim()}
