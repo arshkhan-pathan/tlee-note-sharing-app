@@ -3,19 +3,25 @@ import React, { useState, useEffect, ChangeEvent } from 'react'
 type NoteEditorProps = {
   initialContent?: string
   onChange?: (data: { content: string }) => void
+  isSyncing?: boolean
+  setModalOpen?: (isOpen: boolean) => void
 }
 
-const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }) => {
+const NoteEditor: React.FC<NoteEditorProps> = ({
+  initialContent = '',
+  onChange,
+  isSyncing = false,
+  setModalOpen = (f) => f,
+}) => {
   const [content, setContent] = useState(initialContent)
   const [windowWidth, setWindowWidth] = useState<number | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setWindowWidth(window.innerWidth)
-
       const handleResize = () => setWindowWidth(window.innerWidth)
+      setWindowWidth(window.innerWidth)
       window.addEventListener('resize', handleResize)
-
       return () => window.removeEventListener('resize', handleResize)
     }
   }, [])
@@ -23,6 +29,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
   useEffect(() => {
     setContent(initialContent)
   }, [initialContent])
+
+  const isMobile = windowWidth !== null && windowWidth <= 600
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
@@ -43,86 +51,63 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
     const start = target.selectionStart
     const end = target.selectionEnd
 
-    // Tab: Insert 2 spaces or indent selection
     if (e.key === 'Tab') {
       e.preventDefault()
-
       if (start !== end) {
-        // Indent selected lines
         const lines = content.slice(start, end).split('\n')
         const before = content.slice(0, start)
         const after = content.slice(end)
-
         const indentedLines = lines.map((line) => '  ' + line).join('\n')
         const newValue = before + indentedLines + after
         setContent(newValue)
-
         requestAnimationFrame(() => {
           target.selectionStart = start
           target.selectionEnd = end + lines.length * 2
         })
       } else {
-        // Insert 2 spaces at cursor
         const newValue = content.slice(0, start) + '  ' + content.slice(end)
         setContent(newValue)
         requestAnimationFrame(() => {
           target.selectionStart = target.selectionEnd = start + 2
         })
       }
-    }
-
-    // Auto-indent and list continuation on Enter
-    else if (e.key === 'Enter') {
+    } else if (e.key === 'Enter') {
       const before = content.slice(0, start)
       const after = content.slice(end)
-
       const lineStart = before.lastIndexOf('\n') + 1
       const currentLine = before.slice(lineStart)
-
-      // Match bullet, number, or checkbox lists
       const bulletMatch = currentLine.match(/^(\s*([-*+])\s)/)
       const numberMatch = currentLine.match(/^(\s*)(\d+)([.)])\s/)
       const checkboxMatch = currentLine.match(/^(\s*[-*+]\s\[[ xX]\]\s)/)
 
       e.preventDefault()
 
-      let insertText = '\n' // default new line
-
+      let insertText = '\n'
       if (checkboxMatch) {
-        // Continue checkbox list if not empty line
-        if (currentLine.trim() === checkboxMatch[0].trim()) {
-          // If current line is just checkbox markup, stop list
-          insertText += checkboxMatch[1].replace(/[-*+]\s\[[ xX]\]\s/, '')
-        } else {
-          insertText += checkboxMatch[1]
-        }
+        insertText +=
+          currentLine.trim() === checkboxMatch[0].trim()
+            ? checkboxMatch[1].replace(/[-*+]\s\[[ xX]\]\s/, '')
+            : checkboxMatch[1]
       } else if (bulletMatch) {
-        if (currentLine.trim() === bulletMatch[1].trim()) {
-          // User pressed enter on empty bullet line, exit list
-          insertText += bulletMatch[1].replace(/[-*+]\s/, '')
-        } else {
-          insertText += bulletMatch[1]
-        }
+        insertText +=
+          currentLine.trim() === bulletMatch[1].trim()
+            ? bulletMatch[1].replace(/[-*+]\s/, '')
+            : bulletMatch[1]
       } else if (numberMatch) {
         const indent = numberMatch[1]
         const number = parseInt(numberMatch[2], 10)
         const delimiter = numberMatch[3]
-
-        if (currentLine.trim() === `${number}${delimiter}`) {
-          // User pressed enter on empty number line, exit list
-          insertText += indent
-        } else {
-          insertText += indent + (number + 1) + delimiter + ' '
-        }
+        insertText +=
+          currentLine.trim() === `${number}${delimiter}`
+            ? indent
+            : indent + (number + 1) + delimiter + ' '
       } else {
-        // Normal indent (spaces)
         const indentMatch = currentLine.match(/^(\s*)/)
         insertText += indentMatch ? indentMatch[1] : ''
       }
 
       const newValue = before + insertText + after
       setContent(newValue)
-
       requestAnimationFrame(() => {
         const cursorPos = start + insertText.length
         target.selectionStart = target.selectionEnd = cursorPos
@@ -130,49 +115,51 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
     }
   }
 
-  const isMobile = windowWidth !== null && windowWidth <= 600
-
   return (
-    <div
-      style={{
-        ...styles.page,
-        padding: isMobile ? 10 : 20,
-      }}
-    >
-      <header
-        style={{
-          ...styles.header,
-          flexDirection: isMobile ? 'column' : 'row',
-          alignItems: isMobile ? 'flex-start' : 'center',
-          gap: isMobile ? 10 : 0,
-        }}
-      >
+    <div style={{ ...styles.page, padding: isMobile ? 10 : 20 }}>
+      <header style={styles.header}>
         <div style={styles.logo}>Tlee</div>
-        <div
-          style={{
-            ...styles.actions,
-            flexWrap: isMobile ? 'wrap' : 'nowrap',
-            gap: isMobile ? 6 : 10,
-            marginTop: isMobile ? 8 : 0,
-            width: isMobile ? '100%' : 'auto',
-            justifyContent: isMobile ? 'center' : 'flex-start',
-          }}
-        >
-          <button style={styles.actionButton} onClick={handleCopy}>
-            Copy to Clipboard
-          </button>
-        </div>
+
+        {isMobile ? (
+          <div style={styles.mobileMenu}>
+            {isSyncing && <span style={styles.syncIndicator}>Saving...</span>}
+            <button style={styles.actionButton} onClick={handleCopy}>
+              Copy
+            </button>
+            <button style={styles.menuIcon} onClick={() => setMenuOpen(!menuOpen)}>
+              ☰
+            </button>
+            {menuOpen && (
+              <div style={styles.mobileActions}>
+                <button style={styles.actionButton} onClick={() => setModalOpen(true)}>
+                  Go to Page
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div style={styles.actions}>
+            {isSyncing && <span style={styles.syncIndicator}>Saving...</span>}
+            <button style={styles.actionButton} onClick={() => setModalOpen(true)}>
+              Go to Page
+            </button>
+            <button style={styles.actionButton} onClick={handleCopy}>
+              Copy to Clipboard
+            </button>
+          </div>
+        )}
       </header>
+
       <textarea
         placeholder="Write a note in this area!!"
         value={content}
         onChange={handleTextChange}
+        onKeyDown={handleKeyDown}
         style={{
           ...styles.textArea,
-          height: isMobile ? '60vh' : '80vh',
+          height: isMobile ? '80vh' : '80vh',
           fontSize: isMobile ? 14 : 16,
         }}
-        onKeyDown={handleKeyDown}
       />
     </div>
   )
@@ -189,9 +176,10 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '10px 15px',
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    color: '#f0f0f0',
     fontFamily: "'Comic Sans MS', cursive, sans-serif",
     fontWeight: 'bold',
-    color: '#f0f0f0',
   },
   logo: {
     fontSize: 24,
@@ -199,14 +187,49 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   actions: {
     display: 'flex',
-    gap: 10,
+    alignItems: 'center',
+    gap: 12,
   },
   actionButton: {
     background: 'none',
-    border: 'none',
+    border: '1px solid #ffd54f',
+    borderRadius: 4,
+    padding: '6px 10px',
     cursor: 'pointer',
     fontWeight: 'bold',
     color: '#ffd54f',
+  },
+  syncIndicator: {
+    fontSize: 12,
+    color: '#ccc',
+    marginRight: 10,
+  },
+  menuIcon: {
+    fontSize: 22,
+    background: 'none',
+    border: 'none',
+    color: '#ffd54f',
+    cursor: 'pointer',
+  },
+  mobileMenu: {
+    position: 'relative',
+    display: 'flex',
+    gap: '10px',
+    alignItems: 'center',
+  },
+  mobileActions: {
+    position: 'absolute',
+    top: '100%',
+    right: 0,
+    backgroundColor: '#2c2c2c',
+    border: '1px solid #444',
+    padding: 10,
+    borderRadius: 4,
+    marginTop: 4,
+    zIndex: 100,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
   },
   textArea: {
     marginTop: 10,
