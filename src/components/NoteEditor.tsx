@@ -38,6 +38,98 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const target = e.target as HTMLTextAreaElement
+    const start = target.selectionStart
+    const end = target.selectionEnd
+
+    // Tab: Insert 2 spaces or indent selection
+    if (e.key === 'Tab') {
+      e.preventDefault()
+
+      if (start !== end) {
+        // Indent selected lines
+        const lines = content.slice(start, end).split('\n')
+        const before = content.slice(0, start)
+        const after = content.slice(end)
+
+        const indentedLines = lines.map((line) => '  ' + line).join('\n')
+        const newValue = before + indentedLines + after
+        setContent(newValue)
+
+        requestAnimationFrame(() => {
+          target.selectionStart = start
+          target.selectionEnd = end + lines.length * 2
+        })
+      } else {
+        // Insert 2 spaces at cursor
+        const newValue = content.slice(0, start) + '  ' + content.slice(end)
+        setContent(newValue)
+        requestAnimationFrame(() => {
+          target.selectionStart = target.selectionEnd = start + 2
+        })
+      }
+    }
+
+    // Auto-indent and list continuation on Enter
+    else if (e.key === 'Enter') {
+      const before = content.slice(0, start)
+      const after = content.slice(end)
+
+      const lineStart = before.lastIndexOf('\n') + 1
+      const currentLine = before.slice(lineStart)
+
+      // Match bullet, number, or checkbox lists
+      const bulletMatch = currentLine.match(/^(\s*([-*+])\s)/)
+      const numberMatch = currentLine.match(/^(\s*)(\d+)([.)])\s/)
+      const checkboxMatch = currentLine.match(/^(\s*[-*+]\s\[[ xX]\]\s)/)
+
+      e.preventDefault()
+
+      let insertText = '\n' // default new line
+
+      if (checkboxMatch) {
+        // Continue checkbox list if not empty line
+        if (currentLine.trim() === checkboxMatch[0].trim()) {
+          // If current line is just checkbox markup, stop list
+          insertText += checkboxMatch[1].replace(/[-*+]\s\[[ xX]\]\s/, '')
+        } else {
+          insertText += checkboxMatch[1]
+        }
+      } else if (bulletMatch) {
+        if (currentLine.trim() === bulletMatch[1].trim()) {
+          // User pressed enter on empty bullet line, exit list
+          insertText += bulletMatch[1].replace(/[-*+]\s/, '')
+        } else {
+          insertText += bulletMatch[1]
+        }
+      } else if (numberMatch) {
+        const indent = numberMatch[1]
+        const number = parseInt(numberMatch[2], 10)
+        const delimiter = numberMatch[3]
+
+        if (currentLine.trim() === `${number}${delimiter}`) {
+          // User pressed enter on empty number line, exit list
+          insertText += indent
+        } else {
+          insertText += indent + (number + 1) + delimiter + ' '
+        }
+      } else {
+        // Normal indent (spaces)
+        const indentMatch = currentLine.match(/^(\s*)/)
+        insertText += indentMatch ? indentMatch[1] : ''
+      }
+
+      const newValue = before + insertText + after
+      setContent(newValue)
+
+      requestAnimationFrame(() => {
+        const cursorPos = start + insertText.length
+        target.selectionStart = target.selectionEnd = cursorPos
+      })
+    }
+  }
+
   const isMobile = windowWidth !== null && windowWidth <= 600
 
   return (
@@ -80,23 +172,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({ initialContent = '', onChange }
           height: isMobile ? '60vh' : '80vh',
           fontSize: isMobile ? 14 : 16,
         }}
-        onKeyDown={(e) => {
-          if (e.key === 'Tab') {
-            e.preventDefault()
-            const target = e.target as HTMLTextAreaElement
-            const start = target.selectionStart
-            const end = target.selectionEnd
-
-            const newValue = content.substring(0, start) + '  ' + content.substring(end) // 2 spaces
-            setContent(newValue)
-            onChange?.({ content: newValue })
-
-            // Move cursor after inserted spaces
-            requestAnimationFrame(() => {
-              target.selectionStart = target.selectionEnd = start + 2
-            })
-          }
-        }}
+        onKeyDown={handleKeyDown}
       />
     </div>
   )
