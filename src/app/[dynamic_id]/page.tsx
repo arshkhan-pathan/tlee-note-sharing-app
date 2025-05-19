@@ -2,16 +2,10 @@ import { Metadata } from 'next'
 import NoteEditorPage from '@/components/Pages/NoteEditorPage'
 import { BACKEND_URL } from '@/constants'
 
-type PageProps = {
-  params: {
-    dynamic_id: string
-  }
-}
-
 export async function generateMetadata({
   params,
 }: {
-  params: { dynamic_id: string }
+  params: Promise<{ dynamic_id: string }>
 }): Promise<Metadata> {
   const { dynamic_id: id } = await params
 
@@ -21,7 +15,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: { params: Promise<{ dynamic_id: string }> }) {
   const { dynamic_id } = await params
   const res = await fetch(`${BACKEND_URL}/notes/${dynamic_id}`, {
     cache: 'no-store',

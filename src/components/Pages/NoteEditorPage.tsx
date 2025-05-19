@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, CircularProgress, Typography, Modal, TextField, Button, Fade } from '@mui/material'
-import NoteEditor from '@/components/NoteEditor'
+import { Box, Typography, Modal, TextField, Button, Fade } from '@mui/material'
+import NoteEditor from '@/components/Common/NoteEditor'
 import { BACKEND_URL } from '@/constants'
 
 type Props = {

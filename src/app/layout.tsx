@@ -2,7 +2,7 @@
 
 import './globals.css'
 import { ReactNode } from 'react'
-import BackgroundAnimation from '@/components/BackgroundAnimation'
+import BackgroundAnimation from '@/components/Common/BackgroundAnimation/BackgroundAnimation'
 
 interface Props {
   children: ReactNode
