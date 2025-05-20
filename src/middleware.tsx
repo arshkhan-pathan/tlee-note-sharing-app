@@ -4,7 +4,7 @@ import { generateRandomHeroName } from '@/utils'
 
 export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === '/') {
-    const word = generateRandomHeroName()
+    const word = generateRandomHeroName().toLowerCase()
     const newUrl = request.nextUrl.clone()
     newUrl.pathname = `/${word}`
     return NextResponse.redirect(newUrl)
