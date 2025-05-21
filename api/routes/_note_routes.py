@@ -10,9 +10,9 @@ router = APIRouter()
 def hello():
     return {"message": "Hello from FastAPI!"}
 
-@router.get("/api/notes", response_model=list[NoteResponse])
-def get_notes(db: Session = Depends(get_db)):
-    return svc.get_all_notes(db)
+# @router.get("/api/notes", response_model=list[NoteResponse])
+# def get_notes(db: Session = Depends(get_db)):
+#     return svc.get_all_notes(db)
 
 @router.get("/api/notes/{identifier}", response_model=NoteResponse)
 def get_note(identifier: str, db: Session = Depends(get_db)):
