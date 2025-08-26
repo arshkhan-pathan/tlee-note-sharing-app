@@ -1,5 +1,6 @@
 annotated-types==0.7.0
 anyio==4.9.0
+bcrypt
 certifi==2025.1.31
 click==8.1.8
 dnspython==2.7.0
@@ -20,10 +21,12 @@ markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
 orjson==3.10.16
+passlib
 pydantic==2.11.1
 pydantic-extra-types==2.10.3
 pydantic-settings==2.8.1
 pydantic_core==2.33.0
+PyJWT
 Pygments==2.19.1
 python-dotenv==1.1.0
 python-multipart==0.0.20

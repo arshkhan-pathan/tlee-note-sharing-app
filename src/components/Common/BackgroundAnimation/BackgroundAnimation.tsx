@@ -24,11 +24,12 @@ const DarkMovingGradientBackground: React.FC<{ children: React.ReactNode }> = ({
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     position: 'relative',
-    height: '100vh',
-    width: '100vw',
-    overflow: 'hidden',
+    minHeight: '100vh',
+    width: '100%',
+    overflow: 'visible',
     background: `linear-gradient(270deg, #0f2027, #203a43, #2c5364, #1e2a38)`, // dark blues & greys
     backgroundSize: '800% 800%',
+    backgroundAttachment: 'fixed',
     animation: 'gradientShift 10s ease infinite',
     color: '#f0f0f0', // for any text inside
   },

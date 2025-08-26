@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { generateRandomHeroName } from '@/utils'
 
 export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === '/') {
-    const word = generateRandomHeroName().toLowerCase()
-    const newUrl = request.nextUrl.clone()
-    newUrl.pathname = `/${word}`
-    return NextResponse.redirect(newUrl)
+  const { pathname } = request.nextUrl
+
+  // Protect admin routes
+  if (pathname.startsWith('/admin/panel')) {
+    // Check if user is authenticated by looking for adminToken in cookies
+    const adminToken = request.cookies.get('adminToken')?.value
+
+    if (!adminToken) {
+      // Redirect to login page
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
   }
 
   return NextResponse.next()
 }
 
-// Apply only to root route
 export const config = {
-  matcher: ['/'],
+  matcher: ['/admin/panel/:path*'],
 }

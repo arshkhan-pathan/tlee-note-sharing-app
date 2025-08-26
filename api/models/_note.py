@@ -23,3 +23,4 @@ class NoteCreate(NoteBase):
 
 class NoteResponse(NoteBase):
     id: int
+    identifier: str

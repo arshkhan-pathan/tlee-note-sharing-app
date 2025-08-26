@@ -5,7 +5,8 @@ sys.path.append(os.path.dirname(__file__))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes._note_routes import router
+from routes._note_routes import router as note_router
+from routes._admin_routes import router as admin_router
 
 app = FastAPI()
 
@@ -17,7 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(note_router)
+app.include_router(admin_router)
 
 # if __name__ == "__main__":
 #     import uvicorn
