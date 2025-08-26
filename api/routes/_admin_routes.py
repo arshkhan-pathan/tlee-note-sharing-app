@@ -109,3 +109,17 @@ def login_admin_user(
     )
     
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/me", response_model=AdminUserResponse)
+def get_admin_user_info(
+    current_user: AdminUser = Depends(get_current_admin_user)
+):
+    """Get current admin user information"""
+    return AdminUserResponse(
+        id=current_user.id,
+        username=current_user.username,
+        email=current_user.email,
+        is_active=current_user.is_active,
+        is_superuser=current_user.is_superuser
+    )
+
