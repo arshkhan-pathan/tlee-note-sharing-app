@@ -73,7 +73,7 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        padding: '1rem',
+        padding: '0.5rem',
         boxSizing: 'border-box',
         color: 'white',
       }}

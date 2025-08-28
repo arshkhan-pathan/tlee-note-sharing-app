@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
+import MDEditor from '@uiw/react-md-editor'
 
 type NoteEditorProps = {
   initialContent?: string
@@ -16,6 +17,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   const [content, setContent] = useState(initialContent)
   const [windowWidth, setWindowWidth] = useState<number | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isPreviewMode, setIsPreviewMode] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -32,10 +34,10 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
 
   const isMobile = windowWidth !== null && windowWidth <= 600
 
-  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value
-    setContent(value)
-    onChange?.({ content: value })
+  const handleTextChange = (value?: string) => {
+    const newValue = value || ''
+    setContent(newValue)
+    onChange?.({ content: newValue })
   }
 
   const handleCopy = async () => {
@@ -43,75 +45,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       await navigator.clipboard.writeText(content)
     } catch (err) {
       console.error('Failed to copy:', err)
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const target = e.target as HTMLTextAreaElement
-    const start = target.selectionStart
-    const end = target.selectionEnd
-
-    if (e.key === 'Tab') {
-      e.preventDefault()
-      if (start !== end) {
-        const lines = content.slice(start, end).split('\n')
-        const before = content.slice(0, start)
-        const after = content.slice(end)
-        const indentedLines = lines.map((line) => '  ' + line).join('\n')
-        const newValue = before + indentedLines + after
-        setContent(newValue)
-        requestAnimationFrame(() => {
-          target.selectionStart = start
-          target.selectionEnd = end + lines.length * 2
-        })
-      } else {
-        const newValue = content.slice(0, start) + '  ' + content.slice(end)
-        setContent(newValue)
-        requestAnimationFrame(() => {
-          target.selectionStart = target.selectionEnd = start + 2
-        })
-      }
-    } else if (e.key === 'Enter') {
-      const before = content.slice(0, start)
-      const after = content.slice(end)
-      const lineStart = before.lastIndexOf('\n') + 1
-      const currentLine = before.slice(lineStart)
-      const bulletMatch = currentLine.match(/^(\s*([-*+])\s)/)
-      const numberMatch = currentLine.match(/^(\s*)(\d+)([.)])\s/)
-      const checkboxMatch = currentLine.match(/^(\s*[-*+]\s\[[ xX]\]\s)/)
-
-      e.preventDefault()
-
-      let insertText = '\n'
-      if (checkboxMatch) {
-        insertText +=
-          currentLine.trim() === checkboxMatch[0].trim()
-            ? checkboxMatch[1].replace(/[-*+]\s\[[ xX]\]\s/, '')
-            : checkboxMatch[1]
-      } else if (bulletMatch) {
-        insertText +=
-          currentLine.trim() === bulletMatch[1].trim()
-            ? bulletMatch[1].replace(/[-*+]\s/, '')
-            : bulletMatch[1]
-      } else if (numberMatch) {
-        const indent = numberMatch[1]
-        const number = parseInt(numberMatch[2], 10)
-        const delimiter = numberMatch[3]
-        insertText +=
-          currentLine.trim() === `${number}${delimiter}`
-            ? indent
-            : indent + (number + 1) + delimiter + ' '
-      } else {
-        const indentMatch = currentLine.match(/^(\s*)/)
-        insertText += indentMatch ? indentMatch[1] : ''
-      }
-
-      const newValue = before + insertText + after
-      setContent(newValue)
-      requestAnimationFrame(() => {
-        const cursorPos = start + insertText.length
-        target.selectionStart = target.selectionEnd = cursorPos
-      })
     }
   }
 
@@ -123,6 +56,9 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         {isMobile ? (
           <div style={styles.mobileMenu}>
             {isSyncing && <span style={styles.syncIndicator}>Saving...</span>}
+            <button style={styles.actionButton} onClick={() => setIsPreviewMode(!isPreviewMode)}>
+              {isPreviewMode ? 'Edit' : 'Preview'}
+            </button>
             <button style={styles.actionButton} onClick={handleCopy}>
               Copy
             </button>
@@ -140,6 +76,9 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         ) : (
           <div style={styles.actions}>
             {isSyncing && <span style={styles.syncIndicator}>Saving...</span>}
+            <button style={styles.actionButton} onClick={() => setIsPreviewMode(!isPreviewMode)}>
+              {isPreviewMode ? 'Edit' : 'Preview'}
+            </button>
             <button style={styles.actionButton} onClick={() => setModalOpen(true)}>
               Go to Page
             </button>
@@ -150,17 +89,51 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         )}
       </header>
 
-      <textarea
-        placeholder="Write a note in this area!!"
-        value={content}
-        onChange={handleTextChange}
-        onKeyDown={handleKeyDown}
-        style={{
-          ...styles.textArea,
-          height: isMobile ? '80vh' : '80vh',
-          fontSize: isMobile ? 14 : 16,
-        }}
-      />
+      <div style={styles.editorContainer}>
+        <MDEditor
+          value={content}
+          onChange={handleTextChange}
+          height={isMobile ? '80vh' : '80vh'}
+          preview={isPreviewMode ? 'preview' : 'edit'}
+          style={styles.markdownEditor}
+          textareaProps={{
+            placeholder: `Write a note in this area!! 
+
+Markdown Examples:
+# Heading 1
+## Heading 2
+**Bold text**
+*Italic text*
+- Bullet point
+1. Numbered list
+[Link text](url)
+![Alt text](image-url)
+\`inline code\`
+\`\`\`javascript
+// code block
+\`\`\`
+> Blockquote`,
+            style: {
+              fontSize: isMobile ? 14 : 16,
+              lineHeight: 1.5,
+              color: '#fffde7',
+              backgroundColor: '#333333',
+              border: 'none',
+              outline: 'none',
+              fontFamily: 'Arial, sans-serif',
+            },
+          }}
+        />
+      </div>
+
+      {!isMobile && (
+        <div style={styles.shortcutsInfo}>
+          <div style={{ color: '#888', fontSize: '12px' }}>
+            💡 <strong>Keyboard Shortcuts:</strong> Ctrl/Cmd + B (Bold), Ctrl/Cmd + I (Italic),
+            Ctrl/Cmd + K (Link)
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -231,18 +204,27 @@ const styles: { [key: string]: React.CSSProperties } = {
     flexDirection: 'column',
     gap: 8,
   },
-  textArea: {
+  editorContainer: {
     marginTop: 10,
     width: '100%',
     backgroundColor: '#333333',
     border: '2px solid #555555',
     borderLeft: '6px solid #ff7043',
-    padding: 15,
-    fontFamily: 'Arial, sans-serif',
     boxShadow: 'inset 0 0 5px rgba(0,0,0,0.7)',
-    resize: 'none',
-    lineHeight: 1.5,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  markdownEditor: {
+    backgroundColor: '#333333',
     color: '#fffde7',
+  },
+  shortcutsInfo: {
+    marginTop: 10,
+    padding: '0 15px',
+    backgroundColor: '#2c2c2c',
+    border: '1px solid #444',
+    borderRadius: 4,
+    boxShadow: 'inset 0 0 5px rgba(0,0,0,0.7)',
   },
 }
 
