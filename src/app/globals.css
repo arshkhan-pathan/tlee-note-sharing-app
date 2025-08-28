@@ -135,7 +135,7 @@ body {
   padding: 16px !important;
 }
 
-/* GitHub-style headings */
+/* Light theme headings */
 .w-md-editor-preview h1,
 .w-md-editor-preview h2,
 .w-md-editor-preview h3,
@@ -178,7 +178,7 @@ body {
   color: #656d76 !important;
 }
 
-/* GitHub-style paragraphs and text */
+/* Light theme paragraphs and text */
 .w-md-editor-preview p {
   margin-top: 0 !important;
   margin-bottom: 16px !important;
@@ -195,7 +195,7 @@ body {
   color: #24292f !important;
 }
 
-/* GitHub-style code */
+/* Light theme code */
 .w-md-editor-preview code {
   background-color: rgba(175, 184, 193, 0.2) !important;
   color: #24292f !important;
@@ -229,7 +229,7 @@ body {
   white-space: pre !important;
 }
 
-/* GitHub-style code block language indicators */
+/* Light theme code block language indicators */
 .w-md-editor-preview pre::before {
   content: attr(data-language) !important;
   position: absolute !important;
@@ -247,7 +247,7 @@ body {
     ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace !important;
 }
 
-/* GitHub-style inline code improvements */
+/* Light theme inline code improvements */
 .w-md-editor-preview :not(pre) > code {
   background-color: rgba(175, 184, 193, 0.2) !important;
   color: #24292f !important;
@@ -259,7 +259,7 @@ body {
   word-break: break-word !important;
 }
 
-/* GitHub-style emphasis improvements */
+/* Light theme emphasis improvements */
 .w-md-editor-preview strong {
   font-weight: 600 !important;
   color: #24292f !important;
@@ -270,13 +270,13 @@ body {
   color: #24292f !important;
 }
 
-/* GitHub-style strikethrough */
+/* Light theme strikethrough */
 .w-md-editor-preview del {
   color: #656d76 !important;
   text-decoration: line-through !important;
 }
 
-/* GitHub-style task list improvements */
+/* Light theme task list improvements */
 .w-md-editor-preview input[type='checkbox'] {
   margin: 0 0.2em 0.25em 0 !important;
   transform: scale(1.1) !important;
@@ -286,7 +286,7 @@ body {
   accent-color: #0969da !important;
 }
 
-/* GitHub-style definition lists */
+/* Light theme definition lists */
 .w-md-editor-preview dl {
   margin-top: 0 !important;
   margin-bottom: 16px !important;
@@ -304,7 +304,7 @@ body {
   color: #24292f !important;
 }
 
-/* GitHub-style superscript and subscript */
+/* Light theme superscript and subscript */
 .w-md-editor-preview sup {
   font-size: 75% !important;
   line-height: 0 !important;
@@ -323,7 +323,7 @@ body {
   color: #24292f !important;
 }
 
-/* GitHub-style mark/highlight */
+/* Light theme mark/highlight */
 .w-md-editor-preview mark {
   background-color: #fff8c5 !important;
   color: #24292f !important;
@@ -331,13 +331,13 @@ body {
   border-radius: 3px !important;
 }
 
-/* GitHub-style small text */
+/* Light theme small text */
 .w-md-editor-preview small {
   font-size: 85% !important;
   color: #656d76 !important;
 }
 
-/* GitHub-style kbd (keyboard input) */
+/* Light theme kbd (keyboard input) */
 .w-md-editor-preview kbd {
   background-color: #fafbfc !important;
   border: 1px solid #d1d5da !important;
@@ -354,7 +354,7 @@ body {
     ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace !important;
 }
 
-/* GitHub-style blockquotes */
+/* Light theme blockquotes */
 .w-md-editor-preview blockquote {
   border-left: 4px solid #d0d7de !important;
   padding: 0 16px !important;
@@ -367,7 +367,7 @@ body {
   color: #656d76 !important;
 }
 
-/* GitHub-style links */
+/* Light theme links */
 .w-md-editor-preview a {
   color: #0969da !important;
   text-decoration: none !important;
@@ -377,7 +377,7 @@ body {
   text-decoration: underline !important;
 }
 
-/* GitHub-style tables */
+/* Light theme tables */
 .w-md-editor-preview table {
   border-spacing: 0 !important;
   border-collapse: collapse !important;
@@ -416,7 +416,7 @@ body {
   background-color: #f0f0f0 !important;
 }
 
-/* GitHub-style horizontal rules */
+/* Light theme horizontal rules */
 .w-md-editor-preview hr {
   height: 0.25em !important;
   padding: 0 !important;
@@ -425,14 +425,14 @@ body {
   border: 0 !important;
 }
 
-/* GitHub-style images */
+/* Light theme images */
 .w-md-editor-preview img {
   max-width: 100% !important;
   height: auto !important;
   border-radius: 6px !important;
 }
 
-/* GitHub-style lists with better spacing */
+/* Light theme lists with better spacing */
 .w-md-editor-preview ul,
 .w-md-editor-preview ol {
   margin-top: 0 !important;
@@ -459,7 +459,7 @@ body {
   margin-top: 0.25em !important;
 }
 
-/* GitHub-style list markers */
+/* Light theme list markers */
 .w-md-editor-preview ul li::marker {
   color: #656d76 !important;
 }
@@ -469,7 +469,7 @@ body {
   font-weight: 500 !important;
 }
 
-/* GitHub-style nested list indentation */
+/* Light theme nested list indentation */
 .w-md-editor-preview ul ul,
 .w-md-editor-preview ol ol,
 .w-md-editor-preview ul ol,
@@ -478,7 +478,7 @@ body {
   margin-bottom: 0 !important;
 }
 
-/* GitHub-style list item content */
+/* Light theme list item content */
 .w-md-editor-preview li > p {
   margin-top: 16px !important;
   margin-bottom: 16px !important;
@@ -493,25 +493,525 @@ body {
   margin-bottom: 0 !important;
 }
 
-/* GitHub-style list item with multiple paragraphs */
+/* Light theme list item with multiple paragraphs */
 .w-md-editor-preview li + li > p {
   margin-top: 0 !important;
 }
 
-/* GitHub-style list item with code blocks */
+/* Light theme list item with code blocks */
 .w-md-editor-preview li > pre {
   margin-top: 16px !important;
   margin-bottom: 16px !important;
 }
 
-/* GitHub-style list item with blockquotes */
+/* Light theme list item with blockquotes */
 .w-md-editor-preview li > blockquote {
   margin-top: 16px !important;
   margin-bottom: 16px !important;
 }
 
-/* GitHub-style list item with tables */
+/* Light theme list item with tables */
 .w-md-editor-preview li > table {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Dark theme GitHub-inspired preview styling */
+.w-md-editor-preview.dark-theme {
+  background-color: #0d1117 !important;
+  color: #c9d1d9 !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  padding: 16px !important;
+}
+
+/* Alternative dark theme approach - when parent has dark-theme class */
+.dark-theme .w-md-editor-preview {
+  background-color: #0d1117 !important;
+  color: #c9d1d9 !important;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  padding: 16px !important;
+}
+
+/* Dark theme headings when parent has dark-theme class */
+.dark-theme .w-md-editor-preview h1,
+.dark-theme .w-md-editor-preview h2,
+.dark-theme .w-md-editor-preview h3,
+.dark-theme .w-md-editor-preview h4,
+.dark-theme .w-md-editor-preview h5,
+.dark-theme .w-md-editor-preview h6 {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  margin-top: 24px !important;
+  margin-bottom: 16px !important;
+}
+
+.dark-theme .w-md-editor-preview h1 {
+  font-size: 2em !important;
+  border-bottom: 1px solid #30363d !important;
+  padding-bottom: 0.3em !important;
+}
+
+.dark-theme .w-md-editor-preview h2 {
+  font-size: 1.5em !important;
+  border-bottom: 1px solid #30363d !important;
+  padding-bottom: 0.3em !important;
+}
+
+.dark-theme .w-md-editor-preview h3 {
+  font-size: 1.25em !important;
+}
+
+.dark-theme .w-md-editor-preview h4 {
+  font-size: 1em !important;
+}
+
+.dark-theme .w-md-editor-preview h5 {
+  font-size: 0.875em !important;
+}
+
+.dark-theme .w-md-editor-preview h6 {
+  font-size: 0.85em !important;
+  color: #7c3aed !important;
+}
+
+/* Dark theme paragraphs and text when parent has dark-theme class */
+.dark-theme .w-md-editor-preview p {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview strong {
+  font-weight: 600 !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview em {
+  font-style: italic !important;
+  color: #c9d1d9 !important;
+}
+
+/* Dark theme code when parent has dark-theme class */
+.dark-theme .w-md-editor-preview code {
+  background-color: rgba(110, 118, 129, 0.4) !important;
+  color: #79c0ff !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 6px !important;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace !important;
+  font-size: 85% !important;
+  word-break: break-word !important;
+}
+
+.dark-theme .w-md-editor-preview pre {
+  background-color: #161b22 !important;
+  border: 1px solid #30363d !important;
+  border-radius: 6px !important;
+  padding: 16px !important;
+  overflow: auto !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  position: relative !important;
+}
+
+/* Fix for code block text visibility in dark theme */
+.dark-theme .w-md-editor-preview pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: 85% !important;
+  line-height: 1.45 !important;
+  color: #e6edf3 !important;
+  word-break: normal !important;
+  white-space: pre !important;
+  font-weight: 400 !important;
+}
+
+/* Ensure all code elements in dark theme are visible */
+.dark-theme .w-md-editor-preview pre * {
+  color: #e6edf3 !important;
+}
+
+.dark-theme .w-md-editor-preview pre span {
+  color: #e6edf3 !important;
+}
+
+.dark-theme .w-md-editor-preview pre div {
+  color: #e6edf3 !important;
+}
+
+/* Force code text color in dark theme */
+.dark-theme .w-md-editor-preview pre,
+.dark-theme .w-md-editor-preview pre *,
+.dark-theme .w-md-editor-preview pre code,
+.dark-theme .w-md-editor-preview pre span,
+.dark-theme .w-md-editor-preview pre div {
+  color: #e6edf3 !important;
+}
+
+/* Additional dark theme code visibility fixes */
+.dark-theme .w-md-editor-preview pre .token,
+.dark-theme .w-md-editor-preview pre .hljs,
+.dark-theme .w-md-editor-preview pre .prismjs,
+.dark-theme .w-md-editor-preview pre .highlight {
+  color: #e6edf3 !important;
+}
+
+/* Ensure specific syntax highlighting tokens are visible */
+.dark-theme .w-md-editor-preview pre .token.comment,
+.dark-theme .w-md-editor-preview pre .token.prolog,
+.dark-theme .w-md-editor-preview pre .token.doctype,
+.dark-theme .w-md-editor-preview pre .token.cdata {
+  color: #8b949e !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.punctuation {
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.property,
+.dark-theme .w-md-editor-preview pre .token.tag,
+.dark-theme .w-md-editor-preview pre .token.boolean,
+.dark-theme .w-md-editor-preview pre .token.number,
+.dark-theme .w-md-editor-preview pre .token.constant,
+.dark-theme .w-md-editor-preview pre .token.symbol {
+  color: #79c0ff !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.selector,
+.dark-theme .w-md-editor-preview pre .token.attr-name,
+.dark-theme .w-md-editor-preview pre .token.string,
+.dark-theme .w-md-editor-preview pre .token.char,
+.dark-theme .w-md-editor-preview pre .token.builtin {
+  color: #a5d6ff !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.operator,
+.dark-theme .w-md-editor-preview pre .token.entity,
+.dark-theme .w-md-editor-preview pre .token.url,
+.dark-theme .w-md-editor-preview pre .token.variable {
+  color: #ff7b72 !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.atrule,
+.dark-theme .w-md-editor-preview pre .token.attr-value,
+.dark-theme .w-md-editor-preview pre .token.function,
+.dark-theme .w-md-editor-preview pre .token.class-name {
+  color: #d2a8ff !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.keyword {
+  color: #ff7b72 !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.regex,
+.dark-theme .w-md-editor-preview pre .token.important {
+  color: #ffa198 !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.important,
+.dark-theme .w-md-editor-preview pre .token.bold {
+  font-weight: bold !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.italic {
+  font-style: italic !important;
+}
+
+.dark-theme .w-md-editor-preview pre .token.entity {
+  cursor: help !important;
+}
+
+/* Dark theme code block language indicators when parent has dark-theme class */
+.dark-theme .w-md-editor-preview pre::before {
+  content: attr(data-language) !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  background-color: #21262d !important;
+  color: #8b949e !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+  border-radius: 0 6px 0 6px !important;
+  border-left: 1px solid #30363d !important;
+  border-bottom: 1px solid #30363d !important;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace !important;
+}
+
+/* Dark theme inline code improvements when parent has dark-theme class */
+.dark-theme .w-md-editor-preview :not(pre) > code {
+  background-color: rgba(110, 118, 129, 0.4) !important;
+  color: #79c0ff !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 6px !important;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace !important;
+  font-size: 85% !important;
+  word-break: break-word !important;
+}
+
+/* Dark theme emphasis improvements when parent has dark-theme class */
+.dark-theme .w-md-editor-preview strong {
+  font-weight: 600 !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview em {
+  font-style: italic !important;
+  color: #c9d1d9 !important;
+}
+
+/* Dark theme strikethrough when parent has dark-theme class */
+.dark-theme .w-md-editor-preview del {
+  color: #8b949e !important;
+  text-decoration: line-through !important;
+}
+
+/* Dark theme task list improvements when parent has dark-theme class */
+.dark-theme .w-md-editor-preview input[type='checkbox'] {
+  margin: 0 0.2em 0.25em 0 !important;
+  transform: scale(1.1) !important;
+}
+
+.dark-theme .w-md-editor-preview input[type='checkbox']:checked {
+  accent-color: #58a6ff !important;
+}
+
+/* Dark theme definition lists when parent has dark-theme class */
+.dark-theme .w-md-editor-preview dl {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+.dark-theme .w-md-editor-preview dt {
+  font-weight: 600 !important;
+  color: #c9d1d9 !important;
+  margin-top: 16px !important;
+}
+
+.dark-theme .w-md-editor-preview dd {
+  margin-left: 0 !important;
+  margin-bottom: 16px !important;
+  color: #c9d1d9 !important;
+}
+
+/* Dark theme superscript and subscript when parent has dark-theme class */
+.dark-theme .w-md-editor-preview sup {
+  font-size: 75% !important;
+  line-height: 0 !important;
+  position: relative !important;
+  vertical-align: baseline !important;
+  top: -0.5em !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview sub {
+  font-size: 75% !important;
+  line-height: 0 !important;
+  position: relative !important;
+  vertical-align: baseline !important;
+  bottom: -0.25em !important;
+  color: #c9d1d9 !important;
+}
+
+/* Dark theme mark/highlight when parent has dark-theme class */
+.dark-theme .w-md-editor-preview mark {
+  background-color: #9e6a03 !important;
+  color: #f0f6fc !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+}
+
+/* Dark theme small text when parent has dark-theme class */
+.dark-theme .w-md-editor-preview small {
+  font-size: 85% !important;
+  color: #8b949e !important;
+}
+
+/* Dark theme kbd (keyboard input) when parent has dark-theme class */
+.dark-theme .w-md-editor-preview kbd {
+  background-color: #21262d !important;
+  border: 1px solid #30363d !important;
+  border-bottom-color: #484f58 !important;
+  border-radius: 3px !important;
+  box-shadow: inset 0 -1px 0 #484f58 !important;
+  color: #c9d1d9 !important;
+  display: inline-block !important;
+  font-size: 11px !important;
+  line-height: 10px !important;
+  padding: 3px 5px !important;
+  vertical-align: middle !important;
+  font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace !important;
+}
+
+/* Dark theme blockquotes when parent has dark-theme class */
+.dark-theme .w-md-editor-preview blockquote {
+  border-left: 4px solid #30363d !important;
+  padding: 0 16px !important;
+  color: #8b949e !important;
+  margin: 0 0 16px 0 !important;
+}
+
+.dark-theme .w-md-editor-preview blockquote p {
+  margin-bottom: 0 !important;
+  color: #8b949e !important;
+}
+
+/* Dark theme links when parent has dark-theme class */
+.dark-theme .w-md-editor-preview a {
+  color: #58a6ff !important;
+  text-decoration: none !important;
+}
+
+.dark-theme .w-md-editor-preview a:hover {
+  text-decoration: underline !important;
+}
+
+/* Dark theme tables when parent has dark-theme class */
+.dark-theme .w-md-editor-preview table {
+  border-spacing: 0 !important;
+  border-collapse: collapse !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  width: 100% !important;
+  display: block !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+}
+
+.dark-theme .w-md-editor-preview table th,
+.dark-theme .w-md-editor-preview table td {
+  padding: 6px 13px !important;
+  border: 1px solid #30363d !important;
+  text-align: left !important;
+  vertical-align: top !important;
+}
+
+.dark-theme .w-md-editor-preview table th {
+  background-color: #161b22 !important;
+  font-weight: 600 !important;
+  color: #c9d1d9 !important;
+  border-bottom: 2px solid #30363d !important;
+}
+
+.dark-theme .w-md-editor-preview table td {
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview table tr:nth-child(2n) {
+  background-color: #161b22 !important;
+}
+
+.dark-theme .w-md-editor-preview table tr:hover {
+  background-color: #21262d !important;
+}
+
+/* Dark theme horizontal rules when parent has dark-theme class */
+.dark-theme .w-md-editor-preview hr {
+  height: 0.25em !important;
+  padding: 0 !important;
+  margin: 24px 0 !important;
+  background-color: #30363d !important;
+  border: 0 !important;
+}
+
+/* Dark theme images when parent has dark-theme class */
+.dark-theme .w-md-editor-preview img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 6px !important;
+}
+
+/* Dark theme lists with better spacing when parent has dark-theme class */
+.dark-theme .w-md-editor-preview ul,
+.dark-theme .w-md-editor-preview ol {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  padding-left: 2em !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview ul ul,
+.dark-theme .w-md-editor-preview ol ol {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dark-theme .w-md-editor-preview ul li,
+.dark-theme .w-md-editor-preview ol li {
+  margin-top: 0.25em !important;
+  margin-bottom: 0.25em !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview ul li + li,
+.dark-theme .w-md-editor-preview ol li + li {
+  margin-top: 0.25em !important;
+}
+
+/* Dark theme list markers when parent has dark-theme class */
+.dark-theme .w-md-editor-preview ul li::marker {
+  color: #8b949e !important;
+}
+
+.dark-theme .w-md-editor-preview ol li::marker {
+  color: #8b949e !important;
+  font-weight: 500 !important;
+}
+
+/* Dark theme nested list indentation when parent has dark-theme class */
+.dark-theme .w-md-editor-preview ul ul,
+.dark-theme .w-md-editor-preview ol ol,
+.dark-theme .w-md-editor-preview ul ol,
+.dark-theme .w-md-editor-preview ol ul {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Dark theme list item content when parent has dark-theme class */
+.dark-theme .w-md-editor-preview li > p {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+  color: #c9d1d9 !important;
+}
+
+.dark-theme .w-md-editor-preview li > p:first-child {
+  margin-top: 0 !important;
+}
+
+.dark-theme .w-md-editor-preview li > p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Dark theme list item with multiple paragraphs when parent has dark-theme class */
+.dark-theme .w-md-editor-preview li + li > p {
+  margin-top: 0 !important;
+}
+
+/* Dark theme list item with code blocks when parent has dark-theme class */
+.dark-theme .w-md-editor-preview li > pre {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Dark theme list item with blockquotes when parent has dark-theme class */
+.dark-theme .w-md-editor-preview li > blockquote {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Dark theme list item with tables when parent has dark-theme class */
+.dark-theme .w-md-editor-preview li > table {
   margin-top: 16px !important;
   margin-bottom: 16px !important;
 }

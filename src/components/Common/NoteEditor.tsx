@@ -18,6 +18,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   const [windowWidth, setWindowWidth] = useState<number | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isPreviewMode, setIsPreviewMode] = useState(false)
+  const [isDarkTheme, setIsDarkTheme] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -67,6 +68,17 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             >
               {isPreviewMode ? 'Edit' : 'Preview'}
             </button>
+            <button
+              style={{
+                ...styles.actionButton,
+                backgroundColor: isDarkTheme ? '#7c3aed' : 'transparent',
+                color: isDarkTheme ? '#fff' : '#ffd54f',
+                marginRight: '8px',
+              }}
+              onClick={() => setIsDarkTheme(!isDarkTheme)}
+            >
+              {isDarkTheme ? '☀️' : '🌙'}
+            </button>
             <button style={styles.actionButton} onClick={handleCopy}>
               Copy
             </button>
@@ -87,6 +99,16 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             <button style={styles.actionButton} onClick={() => setIsPreviewMode(!isPreviewMode)}>
               {isPreviewMode ? 'Edit' : 'Preview'}
             </button>
+            <button
+              style={{
+                ...styles.actionButton,
+                backgroundColor: isDarkTheme ? '#7c3aed' : 'transparent',
+                color: isDarkTheme ? '#fff' : '#ffd54f',
+              }}
+              onClick={() => setIsDarkTheme(!isDarkTheme)}
+            >
+              {isDarkTheme ? '☀️ Light' : '🌙 Dark'}
+            </button>
             <button style={styles.actionButton} onClick={() => setModalOpen(true)}>
               Go to Page
             </button>
@@ -97,7 +119,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         )}
       </header>
 
-      <div style={styles.editorContainer}>
+      <div style={styles.editorContainer} className={isDarkTheme ? 'dark-theme' : ''}>
         <MDEditor
           value={content}
           onChange={handleTextChange}
