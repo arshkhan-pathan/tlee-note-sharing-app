@@ -15,7 +15,14 @@ def get_all_notes(db: Session, search: str = None):
     
     notes = query.all()
     # Convert SQLAlchemy models to Pydantic models
-    return [NoteResponse(id=note.id, note=note.note, author=note.author, identifier=note.identifier) for note in notes]
+    return [NoteResponse(
+        id=note.id, 
+        note=note.note, 
+        author=note.author, 
+        identifier=note.identifier,
+        created_at=note.created_at.isoformat() if note.created_at else None,
+        updated_at=note.updated_at.isoformat() if note.updated_at else None
+    ) for note in notes]
 
 def get_notes_paginated(db: Session, page: int = 1, per_page: int = 10, search: str = None):
     """Get notes with pagination and search"""
@@ -39,7 +46,14 @@ def get_notes_paginated(db: Session, page: int = 1, per_page: int = 10, search: 
     notes = query.offset(offset).limit(per_page).all()
     
     # Convert SQLAlchemy models to Pydantic models
-    note_responses = [NoteResponse(id=note.id, note=note.note, author=note.author, identifier=note.identifier) for note in notes]
+    note_responses = [NoteResponse(
+        id=note.id, 
+        note=note.note, 
+        author=note.author, 
+        identifier=note.identifier,
+        created_at=note.created_at.isoformat() if note.created_at else None,
+        updated_at=note.updated_at.isoformat() if note.updated_at else None
+    ) for note in notes]
     
     total_pages = (total + per_page - 1) // per_page  # Ceiling division
     
@@ -56,7 +70,14 @@ def get_notes_paginated(db: Session, page: int = 1, per_page: int = 10, search: 
 def get_note_by_identifier(db: Session, identifier: str):
     note = db.query(Note).filter(Note.identifier == identifier).first()
     if note:
-        return NoteResponse(id=note.id, note=note.note, author=note.author, identifier=note.identifier)
+        return NoteResponse(
+            id=note.id, 
+            note=note.note, 
+            author=note.author, 
+            identifier=note.identifier,
+            created_at=note.created_at.isoformat() if note.created_at else None,
+            updated_at=note.updated_at.isoformat() if note.updated_at else None
+        )
     return None
 
 def create_or_update_note(db: Session, note):
@@ -69,7 +90,14 @@ def create_or_update_note(db: Session, note):
         db.add(db_note)
     db.commit()
     db.refresh(db_note)
-    return NoteResponse(id=db_note.id, note=db_note.note, author=db_note.author, identifier=db_note.identifier)
+    return NoteResponse(
+        id=db_note.id, 
+        note=db_note.note, 
+        author=db_note.author, 
+        identifier=db_note.identifier,
+        created_at=db_note.created_at.isoformat() if db_note.created_at else None,
+        updated_at=db_note.updated_at.isoformat() if db_note.updated_at else None
+    )
 
 def update_note_by_id(db: Session, note_id: int, note):
     db_note = db.query(Note).filter(Note.id == note_id).first()
@@ -79,7 +107,14 @@ def update_note_by_id(db: Session, note_id: int, note):
     db_note.author = note.author
     db.commit()
     db.refresh(db_note)
-    return NoteResponse(id=db_note.id, note=db_note.note, author=db_note.author, identifier=db_note.identifier)
+    return NoteResponse(
+        id=db_note.id, 
+        note=db_note.note, 
+        author=db_note.author, 
+        identifier=db_note.identifier,
+        created_at=db_note.created_at.isoformat() if db_note.created_at else None,
+        updated_at=db_note.updated_at.isoformat() if db_note.updated_at else None
+    )
 
 def delete_note_by_id(db: Session, note_id: int):
     db_note = db.query(Note).filter(Note.id == note_id).first()
