@@ -16,9 +16,19 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
   const [isSyncing, setIsSyncing] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [inputId, setInputId] = useState('')
+  const [windowWidth, setWindowWidth] = useState<number | null>(null)
 
   const router = useRouter()
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => setWindowWidth(window.innerWidth)
+      setWindowWidth(window.innerWidth)
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const handleSubmit = useCallback(
     async (newNote: string) => {
@@ -73,7 +83,7 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        padding: '0.5rem',
+        padding: windowWidth && windowWidth <= 600 ? '0.25rem' : '0.5rem',
         boxSizing: 'border-box',
         color: 'white',
       }}
@@ -83,7 +93,7 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
           flex: 1,
           minHeight: 0,
           overflow: 'auto',
-          marginBottom: '1rem',
+          marginBottom: windowWidth && windowWidth <= 600 ? '0.5rem' : '1rem',
         }}
       >
         <NoteEditor
@@ -94,13 +104,29 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
         />
       </div>
 
-      <Box sx={{ borderTop: '1px solid #444', paddingTop: 1 }}>
-        <Typography variant="body1">
+      <Box
+        sx={{
+          borderTop: '1px solid #444',
+          paddingTop: windowWidth && windowWidth <= 600 ? 0.5 : 1,
+          paddingX: windowWidth && windowWidth <= 600 ? 1 : 0,
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: windowWidth && windowWidth <= 600 ? '0.875rem' : '1rem',
+            marginBottom: windowWidth && windowWidth <= 600 ? 0.5 : 1,
+          }}
+        >
           Currently editing <strong>/ {dynamic_id}</strong>
         </Typography>
         <Typography
           variant="body1"
-          sx={{ cursor: 'pointer', color: '#ffd54f' }}
+          sx={{
+            cursor: 'pointer',
+            color: '#ffd54f',
+            fontSize: windowWidth && windowWidth <= 600 ? '0.875rem' : '1rem',
+          }}
           onClick={() => setModalOpen(true)}
         >
           Go to another Note
@@ -131,18 +157,26 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
               bgcolor: 'linear-gradient(135deg, #1e1e2f 0%, #3c3c5a 100%)',
               color: 'white',
               boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
-              p: 5,
+              p: windowWidth && windowWidth <= 600 ? 3 : 5,
               borderRadius: 3,
               display: 'flex',
               flexDirection: 'column',
-              gap: 3,
-              width: '90%',
-              maxWidth: 420,
+              gap: windowWidth && windowWidth <= 600 ? 2 : 3,
+              width: '95%',
+              maxWidth: windowWidth && windowWidth <= 600 ? 350 : 420,
               outline: 'none',
               fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
             }}
           >
-            <Typography variant="h5" fontWeight="bold" textAlign="center" sx={{ mb: 1 }}>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              textAlign="center"
+              sx={{
+                mb: 1,
+                fontSize: windowWidth && windowWidth <= 600 ? '1.25rem' : '1.5rem',
+              }}
+            >
               Enter Note ID
             </Typography>
 
@@ -177,7 +211,8 @@ export default function NoteEditorPage({ dynamic_id, initialContent }: Props) {
                 },
                 transition: 'all 0.3s ease',
                 textTransform: 'none',
-                py: 1.5,
+                py: windowWidth && windowWidth <= 600 ? 1 : 1.5,
+                fontSize: windowWidth && windowWidth <= 600 ? '0.875rem' : '1rem',
               }}
               onClick={() => {
                 setModalOpen(false)

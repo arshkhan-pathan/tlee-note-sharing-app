@@ -49,14 +49,22 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   }
 
   return (
-    <div style={{ ...styles.page, padding: isMobile ? 10 : 20 }}>
+    <div style={{ ...styles.page, padding: isMobile ? '0.5rem' : '1rem' }}>
       <header style={styles.header}>
         <div style={styles.logo}>Tlee</div>
 
         {isMobile ? (
           <div style={styles.mobileMenu}>
             {isSyncing && <span style={styles.syncIndicator}>Saving...</span>}
-            <button style={styles.actionButton} onClick={() => setIsPreviewMode(!isPreviewMode)}>
+            <button
+              style={{
+                ...styles.actionButton,
+                backgroundColor: isPreviewMode ? '#ff7043' : 'transparent',
+                color: isPreviewMode ? '#fff' : '#ffd54f',
+                marginRight: '8px',
+              }}
+              onClick={() => setIsPreviewMode(!isPreviewMode)}
+            >
               {isPreviewMode ? 'Edit' : 'Preview'}
             </button>
             <button style={styles.actionButton} onClick={handleCopy}>
@@ -93,11 +101,21 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         <MDEditor
           value={content}
           onChange={handleTextChange}
-          height={isMobile ? '80vh' : '80vh'}
+          height={isMobile ? '85vh' : '80vh'}
           preview={isPreviewMode ? 'preview' : 'edit'}
           style={styles.markdownEditor}
           textareaProps={{
-            placeholder: `Write a note in this area!! 
+            placeholder: isMobile
+              ? `Write your note here!
+
+Quick Markdown:
+# Heading
+**Bold** *Italic*
+- List item
+[Link](url)
+\`code\`
+Quote`
+              : `Write a note in this area!! 
 
 Markdown Examples:
 # Heading 1
@@ -112,10 +130,10 @@ Markdown Examples:
 \`\`\`javascript
 // code block
 \`\`\`
-> Blockquote`,
+Blockquote`,
             style: {
-              fontSize: isMobile ? 14 : 16,
-              lineHeight: 1.5,
+              fontSize: isMobile ? 16 : 16,
+              lineHeight: 1.6,
               color: '#fffde7',
               backgroundColor: '#333333',
               border: 'none',
@@ -125,6 +143,14 @@ Markdown Examples:
           }}
         />
       </div>
+
+      {isMobile && (
+        <div style={styles.mobileFormattingGuide}>
+          <div style={{ color: '#888', fontSize: '11px', textAlign: 'center' }}>
+            💡 <strong>Markdown:</strong> # ## ** * - [text](url) \`code\` quote
+          </div>
+        </div>
+      )}
 
       {!isMobile && (
         <div style={styles.shortcutsInfo}>
@@ -171,6 +197,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     cursor: 'pointer',
     fontWeight: 'bold',
     color: '#ffd54f',
+    fontSize: '14px',
+    whiteSpace: 'nowrap',
   },
   syncIndicator: {
     fontSize: 12,
@@ -187,8 +215,11 @@ const styles: { [key: string]: React.CSSProperties } = {
   mobileMenu: {
     position: 'relative',
     display: 'flex',
-    gap: '10px',
+    gap: '6px',
     alignItems: 'center',
+    flexWrap: 'nowrap',
+    minWidth: '200px',
+    justifyContent: 'flex-end',
   },
   mobileActions: {
     position: 'absolute',
@@ -196,13 +227,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     right: 0,
     backgroundColor: '#2c2c2c',
     border: '1px solid #444',
-    padding: 10,
+    padding: 8,
     borderRadius: 4,
     marginTop: 4,
     zIndex: 100,
     display: 'flex',
     flexDirection: 'column',
-    gap: 8,
+    gap: 6,
+    minWidth: '120px',
   },
   editorContainer: {
     marginTop: 10,
@@ -219,6 +251,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#fffde7',
   },
   shortcutsInfo: {
+    marginTop: 10,
+    padding: '0 15px',
+    backgroundColor: '#2c2c2c',
+    border: '1px solid #444',
+    borderRadius: 4,
+    boxShadow: 'inset 0 0 5px rgba(0,0,0,0.7)',
+  },
+  mobileFormattingGuide: {
     marginTop: 10,
     padding: '0 15px',
     backgroundColor: '#2c2c2c',
