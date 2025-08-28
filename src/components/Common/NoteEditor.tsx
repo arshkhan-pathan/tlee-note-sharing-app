@@ -33,6 +33,25 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     setContent(initialContent)
   }, [initialContent])
 
+  // Auto-detect system theme preference
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const handleThemeChange = (e: MediaQueryListEvent) => {
+        setIsDarkTheme(e.matches)
+      }
+
+      // Set initial theme based on system preference
+      setIsDarkTheme(mediaQuery.matches)
+
+      // Listen for system theme changes
+      mediaQuery.addEventListener('change', handleThemeChange)
+
+      // Cleanup
+      return () => mediaQuery.removeEventListener('change', handleThemeChange)
+    }
+  }, [])
+
   const isMobile = windowWidth !== null && windowWidth <= 600
 
   const handleTextChange = (value?: string) => {
@@ -68,17 +87,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             >
               {isPreviewMode ? 'Edit' : 'Preview'}
             </button>
-            <button
-              style={{
-                ...styles.actionButton,
-                backgroundColor: isDarkTheme ? '#7c3aed' : 'transparent',
-                color: isDarkTheme ? '#fff' : '#ffd54f',
-                marginRight: '8px',
-              }}
-              onClick={() => setIsDarkTheme(!isDarkTheme)}
-            >
-              {isDarkTheme ? '☀️' : '🌙'}
-            </button>
             <button style={styles.actionButton} onClick={handleCopy}>
               Copy
             </button>
@@ -99,16 +107,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             <button style={styles.actionButton} onClick={() => setIsPreviewMode(!isPreviewMode)}>
               {isPreviewMode ? 'Edit' : 'Preview'}
             </button>
-            <button
-              style={{
-                ...styles.actionButton,
-                backgroundColor: isDarkTheme ? '#7c3aed' : 'transparent',
-                color: isDarkTheme ? '#fff' : '#ffd54f',
-              }}
-              onClick={() => setIsDarkTheme(!isDarkTheme)}
-            >
-              {isDarkTheme ? '☀️ Light' : '🌙 Dark'}
-            </button>
             <button style={styles.actionButton} onClick={() => setModalOpen(true)}>
               Go to Page
             </button>
@@ -128,42 +126,37 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
           style={styles.markdownEditor}
           textareaProps={{
             placeholder: isMobile
-              ? `Write your note here!
-
-Quick Markdown:
-# Heading
-**Bold** *Italic*
-- List item
-[Link](url)
-\`code\`
-Quote`
-              : `Write a note in this area!! 
-
-Markdown Examples:
-# Heading 1
-## Heading 2
-**Bold text**
-*Italic text*
-- Bullet point
-1. Numbered list
-[Link text](url)
-![Alt text](image-url)
-\`inline code\`
-\`\`\`javascript
-// code block
-\`\`\`
-Blockquote`,
+              ? 'Start typing your note here...\n\nQuick markdown examples:\n# Heading\n**Bold text**\n*Italic text*\n- List item\n[Link](url)'
+              : 'Start typing your note here...\n\nQuick markdown examples:\n# Heading\n**Bold text**\n*Italic text**\n- List item\n[Link](url)',
             style: {
-              fontSize: isMobile ? 16 : 16,
-              lineHeight: 1.6,
-              color: '#fffde7',
-              backgroundColor: '#333333',
+              fontSize: isMobile ? '16px' : '14px',
+              lineHeight: '1.6',
+              color: '#ffffff',
+              backgroundColor: 'transparent',
               border: 'none',
               outline: 'none',
-              fontFamily: 'Arial, sans-serif',
+              resize: 'none',
+              fontFamily: 'monospace',
             },
           }}
         />
+
+        {/* Theme toggle button positioned within preview section */}
+        {isPreviewMode && (
+          <div className="theme-toggle-container">
+            <button
+              className="theme-toggle-button"
+              onClick={() => setIsDarkTheme(!isDarkTheme)}
+              title={
+                isDarkTheme
+                  ? 'Switch to Light Theme (System: Dark)'
+                  : 'Switch to Dark Theme (System: Light)'
+              }
+            >
+              {isDarkTheme ? '☀️' : '🌙'}
+            </button>
+          </div>
+        )}
       </div>
 
       {isMobile && (
@@ -267,10 +260,11 @@ const styles: { [key: string]: React.CSSProperties } = {
     boxShadow: 'inset 0 0 5px rgba(0,0,0,0.7)',
     borderRadius: 4,
     overflow: 'hidden',
+    position: 'relative',
   },
   markdownEditor: {
-    backgroundColor: '#333333',
-    color: '#fffde7',
+    width: '100%',
+    height: '100%',
   },
   shortcutsInfo: {
     marginTop: 10,

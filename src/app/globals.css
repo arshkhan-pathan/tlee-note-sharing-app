@@ -1175,3 +1175,49 @@ body {
 .w-md-editor-preview mark {
   color: #24292f !important;
 }
+
+/* Theme toggle button positioning within preview */
+.w-md-editor-preview,
+.w-md-editor {
+  position: relative;
+}
+
+.theme-toggle-container {
+  position: absolute;
+  top: 30px; /* Moved down from 10px to avoid overlapping */
+  right: 10px;
+  z-index: 1000;
+}
+
+/* Also show in live code mode (when both edit and preview are visible) */
+.w-md-editor .theme-toggle-container {
+  top: 35px; /* Slightly lower in live code mode to avoid toolbar */
+}
+
+.theme-toggle-button {
+  background: none;
+  border: 1px solid #ffd54f;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffd54f;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-button:hover {
+  background-color: rgba(255, 213, 79, 0.1);
+  transform: scale(1.05);
+}
+
+/* Dark theme button styling */
+.dark-theme .theme-toggle-button {
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.dark-theme .theme-toggle-button:hover {
+  background-color: rgba(124, 58, 237, 0.1);
+}
